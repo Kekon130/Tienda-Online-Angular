@@ -16,4 +16,17 @@ export class Store {
   getTotalItems(): number {
     return this.cart.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
   }
+
+  showToast(message: string, type: string = 'success') {
+    const toast: Toast = {
+      id: Date.now(),
+      message,
+      type,
+    };
+
+    this.toasts.push(toast);
+    setTimeout(() => {
+      this.toasts = this.toasts.filter((t) => t.id !== toast.id);
+    }, 3000);
+  }
 }

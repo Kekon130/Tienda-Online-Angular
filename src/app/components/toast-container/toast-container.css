@@ -1,0 +1,7 @@
+.toast-aux {
+  z-index: 1100;
+}
+
+.toast-message {
+  min-width: 400px;
+}

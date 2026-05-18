@@ -1,0 +1,12 @@
+<div class="toast-container toast-aux top-0 start-50 translate-middle-x pt-3">
+  <div
+    *ngFor="let toast of toasts"
+    class="toast show border-0 mb-2 toast-message"
+    [ngClass]="'text-bg-' + toast.type"
+    [attr.id]="toast.id"
+  >
+    <div class="toast-body fs-5 fw-semibold text-center py-3">
+      {{ toast.message }}
+    </div>
+  </div>
+</div>
