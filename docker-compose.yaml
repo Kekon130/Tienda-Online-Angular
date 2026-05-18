@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:18.3-alpine3.23
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=shop_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - "./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
+    networks:
+      - database-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d shop_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  server:
+    image: postgrest/postgrest:v14.10
+    container_name: postgrest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      - PGRST_SERVER_HOST=0.0.0.0
+      - PGRST_DB_URI=postgres://authenticator:mysecretpassword@postgres:5432/shop_db
+      - PGRST_DB_SCHEMA=shop
+      - PGRST_DB_ANON_ROLE=web_anon
+      - PGRST_OPENAPI_SERVER_PROXY_URI=http://127.0.0.1:3000
+    ports:
+      - "3000:3000"
+    networks:
+      - database-network
+      - swagger-network
+  
+  swagger:
+    image: swaggerapi/swagger-ui:v5.32.5
+    container_name: swagger-ui
+    restart: unless-stopped
+    depends_on:
+      - server
+    environment:
+      - API_URL=http://localhost:3000/
+    ports:
+      - "8080:8080"
+    networks:
+      - swagger-network
+volumes:
+  postgres_data:
+    driver: local
+networks:
+  database-network:
+    driver: bridge
+  swagger-network:
+    driver: bridge
