@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 import { Category } from '../models/category';
 import { CartItem } from '../models/cart-item';
@@ -9,13 +9,13 @@ import { Product } from '../models/product';
   providedIn: 'root',
 })
 export class Store {
-  categories: Category[] = [];
-  cart: CartItem[] = [];
-  adminLogged: boolean = false;
-  toasts: Toast[] = [];
+  categories = signal<Category[]>([]);
+  cart = signal<CartItem[]>([]);
+  adminLogged = signal(false);
+  toasts = signal<Toast[]>([]);
 
   getTotalItems(): number {
-    return this.cart.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+    return this.cart().reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
   }
 
   showToast(message: string, type: string = 'success') {
@@ -25,9 +25,9 @@ export class Store {
       type,
     };
 
-    this.toasts.push(toast);
+    this.toasts.update((t) => [...t, toast]);
     setTimeout(() => {
-      this.toasts = this.toasts.filter((t) => t.id !== toast.id);
+      this.toasts.update((t) => t.filter((item) => item.id !== toast.id));
     }, 3000);
   }
 

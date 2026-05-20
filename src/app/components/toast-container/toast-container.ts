@@ -13,7 +13,7 @@ export class ToastContainer {
   store = inject(Store);
 
   get toasts(): Toast[] {
-    return this.store.toasts;
+    return this.store.toasts();
   }
 
   private escapeHtml(text: string): string {
@@ -26,7 +26,7 @@ export class ToastContainer {
   }
 
   renderToasts(): string {
-    return this.store.toasts
+    return this.store.toasts()
       .map((toast: Toast) => {
         return `
 				<div id="${toast.id}" class="toast show text-bg-${toast.type} border-0 mb-2 toast-message">

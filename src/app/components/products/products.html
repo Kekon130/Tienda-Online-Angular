@@ -1,7 +1,7 @@
 <div class="accordion" id="categoriesAccordion">
   <div
     class="accordion-item mb-3 border rounded shadow-sm overflow-hidden"
-    *ngFor="let category of store.categories; let i = index"
+    *ngFor="let category of store.categories(); let i = index"
   >
     <h2 class="accordion-header">
       <button

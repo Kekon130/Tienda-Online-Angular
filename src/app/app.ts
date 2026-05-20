@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Header } from './components/header/header';
@@ -23,8 +23,7 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.api.fetchInventory().then((inventory: Category[]) => {
-      this.store.categories = inventory;
+      this.store.categories.set(inventory);
     });
-    console.log(this.store.categories);
   }
 }
