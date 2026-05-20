@@ -41,7 +41,21 @@ services:
     networks:
       - database-network
       - swagger-network
+      - web-network
   
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: angular-app
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "4200:80"
+    networks:
+      - web-network
+
   swagger:
     image: swaggerapi/swagger-ui:v5.32.5
     container_name: swagger-ui
@@ -61,4 +75,6 @@ networks:
   database-network:
     driver: bridge
   swagger-network:
+    driver: bridge
+  web-network:
     driver: bridge
