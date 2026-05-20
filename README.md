@@ -1,59 +1,139 @@
-# AngularShop
+# Tienda Online Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+An e-commerce single-page application built with Angular 21, Bootstrap 5, and PostgREST. Products are served from a PostgreSQL database through an auto-generated REST API, with no custom backend code required.
 
-## Development server
+## Architecture
 
-To start a local development server, run:
-
-```bash
-ng serve
+```
+┌────────────┐     ┌────────────┐     ┌────────────┐
+│  Angular   │────▶│  PostgREST │────▶│ PostgreSQL │
+│  (nginx)   │     │  REST API  │     │   shop_db  │
+│  :4200     │     │  :3000     │     │   :5432    │
+└────────────┘     └────────────┘     └────────────┘
+                         │
+                   ┌─────┴──────┐
+                   │ Swagger UI │
+                   │   :8080    │
+                   └────────────┘
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Service        | Port | Description                                      |
+|----------------|------|--------------------------------------------------|
+| Angular App    | 4200 | Frontend SPA served by nginx                     |
+| PostgREST      | 3000 | Auto-generated REST API from the database schema |
+| PostgreSQL     | 5432 | Database with seeded product catalog             |
+| Swagger UI     | 8080 | Interactive API documentation                    |
 
-## Code scaffolding
+## Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### With Docker (recommended)
 
 ```bash
-ng build
+docker compose up --build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Open `http://localhost:4200` in your browser.
 
-## Running unit tests
+### Local Development
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Prerequisites: Node.js 22+, pnpm
 
 ```bash
-ng test
+# Start the backend services
+docker compose up db server
+
+# Install dependencies and start the dev server
+pnpm install
+pnpm start
 ```
 
-## Running end-to-end tests
+The dev server runs on `http://localhost:4200` and proxies API calls to `http://localhost:3000`.
 
-For end-to-end (e2e) testing, run:
+## Project Structure
 
-```bash
-ng e2e
+```
+src/app/
+├── components/         # UI components
+├── models/             # TypeScript interfaces
+├── services/           # API and state management
+└── environments/       # Per-environment configuration
+db/
+└── init.sql            # Database schema and seed data
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Components
 
-## Additional Resources
+### App (`app.ts`)
+Root component. Bootstraps the application, fetches the product inventory on init, and composes the top-level layout: header, cart, admin modal, toast container, and the product listing.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Header (`components/header/`)
+Sticky navigation bar with a gradient background. Contains the store logo, a cart button with a live item count badge, and an admin access button.
+
+### Products (`components/products/`)
+Displays all categories as a Bootstrap accordion. Each category section expands to show a responsive grid of product cards: 1 column on mobile, 2 on tablets, 3 on desktop.
+
+### Product Card (`components/product-card/`)
+Individual product display with image, name, description, code, price, and stock status. Includes an "Add to cart" button that is disabled when stock is zero. Cards have a hover elevation effect and reduced opacity when out of stock.
+
+### Cart (`components/cart/`)
+Off-canvas sidebar showing cart items with quantity controls, per-item subtotals, and a running total. Includes three actions:
+- **Add/Remove** — Adjust quantities per item (stock is tracked in real time)
+- **Realizar Pedido** — Checkout (clears the cart)
+- **Vaciar Carrito** — Empties the cart and returns all quantities to inventory
+
+### Admin Modal (`components/admin-modal/`)
+Bootstrap modal that wraps the admin login and admin panel. Opened by the shield button in the header.
+
+### Admin Login (`components/admin-login/`)
+Password form for admin access. Default password: `123456`. Hidden once authenticated.
+
+### Admin Panel (`components/admin-panel/`)
+Tabbed interface (visible after login) with two forms:
+- **Nueva Categoria** — Create a category by name
+- **Nuevo Producto** — Create a product with category, name, code, description, price, stock, and image URL
+
+### Toast Container (`components/toast-container/`)
+Notification system that displays success/error messages at the top of the page. Toasts auto-dismiss after 3 seconds with a slide-down animation.
+
+## Services
+
+### Store (`services/store.ts`)
+Central state management using Angular signals. Manages:
+- `categories` — Product catalog organized by category
+- `cart` — Shopping cart items with quantities
+- `adminLogged` — Admin authentication state
+- `toasts` — Active toast notifications
+
+Key methods: `addToCart()`, `removeFromCart()`, `emptyCart()`, `checkout()`, `createCategory()`, `createProduct()`, `login()`, `showToast()`.
+
+### API (`services/api.ts`)
+HTTP client that fetches categories and products from PostgREST. Uses Angular's `HttpClient` with `firstValueFrom` to convert observables to promises. The base URL is configured per environment (`localhost:3000` in dev, `/api` in production behind nginx).
+
+## Models
+
+| Model      | Fields                                                    |
+|------------|-----------------------------------------------------------|
+| `Product`  | id, name, description, price, stock, image, code          |
+| `Category` | id, name, products                                        |
+| `CartItem` | product, quantity                                         |
+| `Toast`    | id, message, type                                         |
+
+## Database
+
+PostgreSQL with a `shop` schema containing two tables:
+
+- **categories** — 5 seeded categories: Ropa, Calzado, Accesorios, Electronica, Hogar
+- **products** — 36 seeded products with prices, stock levels, and Unsplash images
+
+Access is managed through PostgREST roles:
+- `web_anon` — Read-only anonymous access
+- `authenticator` — Full-privilege login role
+
+## Tech Stack
+
+- **Frontend:** Angular 21 (standalone components, signals, built-in control flow)
+- **UI:** Bootstrap 5.3, Bootstrap Icons
+- **API:** PostgREST 14 (auto-generated REST from PostgreSQL)
+- **Database:** PostgreSQL 18
+- **Containerization:** Docker Compose with 4 services
+- **Web Server:** nginx (production)
