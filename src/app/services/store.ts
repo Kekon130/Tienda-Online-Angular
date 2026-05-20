@@ -98,4 +98,13 @@ export class Store {
       this.showToast('Pedido realizado correctamente', 'success');
     }
   }
+
+  login(password: string) {
+    if (password !== '123456') {
+      this.showToast('Contraseña Incorrecta', 'danger');
+    } else {
+      this.adminLogged = true;
+      this.showToast('Acceso de Administrador Concedido', 'success');
+    }
+  }
 }
