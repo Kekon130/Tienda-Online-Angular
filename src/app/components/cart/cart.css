@@ -1,0 +1,23 @@
+.offcanvas {
+  max-width: 90vw;
+  width: 400px;
+}
+
+@media (max-width: 575.98px) {
+  .card-body .d-flex.gap-3 {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .card-body .d-flex.gap-3 img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .card-body .d-flex.gap-2.mt-auto {
+    justify-content: center;
+  }
+}

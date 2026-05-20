@@ -1,38 +1,36 @@
-<div class="col-sm-6 col-xl-4">
-  <div class="card h-100 shadow-sm" [class.opacity-50]="product.stock <= 0">
-    <img
-      [src]="product.image"
-      class="card-img-top"
-      [alt]="product.name"
-      style="height: 240px; object-fit: cover"
-    />
-    <div class="card-body d-flex flex-column">
-      <div class="mb-2">
-        <h5 class="card-title fw-bold">
-          {{ product.name }}
-        </h5>
-        <p class="card-text text-secondary">
-          {{ product.description }}
-        </p>
+<div class="card product-card h-100" [class.out-of-stock]="product.stock <= 0">
+  <img
+    [src]="product.image"
+    class="card-img-top product-image"
+    [alt]="product.name"
+  />
+  <div class="card-body d-flex flex-column">
+    <div class="mb-2">
+      <h5 class="card-title fw-bold mb-1">
+        {{ product.name }}
+      </h5>
+      <p class="card-text text-secondary small mb-0">
+        {{ product.description }}
+      </p>
+    </div>
+    <div class="mt-auto">
+      <p class="small text-muted mb-2">{{ product.code || product.id }}</p>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-success fw-bold mb-0">{{ product.price | number: '1.2-2' }}€</h4>
+        @if (product.stock > 0) {
+          <span class="badge bg-primary rounded-pill">Stock: {{ product.stock }}</span>
+        } @else {
+          <span class="badge bg-danger rounded-pill">Sin stock</span>
+        }
       </div>
-      <div class="mt-auto">
-        <p class="small text-muted mb-2">Código: {{ product.code || product.id }}</p>
-        <h5 class="text-success fw-bold mb-3">{{ product.price | number: '1.2-2' }}€</h5>
-        <div class="mb-3">
-          <span *ngIf="product.stock > 0" class="badge bg-primary">
-            Stock: {{ product.stock }}
-          </span>
-          <span *ngIf="product.stock <= 0" class="badge bg-danger"> Sin stock </span>
-        </div>
-        <button
-          class="btn btn-primary w-100"
-          [disabled]="product.stock <= 0"
-          (click)="store.addToCart(product.id)"
-        >
-          <i class="bi bi-cart-plus me-2"></i>
-          Agregar a la cesta
-        </button>
-      </div>
+      <button
+        class="btn btn-primary w-100"
+        [disabled]="product.stock <= 0"
+        (click)="store.addToCart(product.id)"
+      >
+        <i class="bi bi-cart-plus me-2"></i>
+        Agregar a la cesta
+      </button>
     </div>
   </div>
 </div>

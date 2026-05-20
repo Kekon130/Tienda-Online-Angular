@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Header } from './components/header/header';
 import { Products } from './components/products/products';
 import { ToastContainer } from './components/toast-container/toast-container';
+import { AdminModal } from './components/admin-modal/admin-modal';
 import { Api } from './services/api';
 import { Store } from './services/store';
 import { Category } from './models/category';
@@ -12,7 +13,7 @@ import { Cart } from './components/cart/cart';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, Header, Products, ToastContainer, Cart],
+  imports: [RouterModule, Header, Products, ToastContainer, Cart, AdminModal],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

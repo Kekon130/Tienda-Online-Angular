@@ -3,5 +3,17 @@
 }
 
 .toast-message {
-  min-width: 400px;
+  min-width: min(400px, 90vw);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

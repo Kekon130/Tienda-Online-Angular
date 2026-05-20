@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '../../services/store';
 import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule],
+  imports: [DecimalPipe],
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })

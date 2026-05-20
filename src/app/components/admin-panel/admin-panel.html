@@ -1,1 +1,100 @@
-<p>admin-panel works!</p>
+@if (store.adminLogged()) {
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'category'"
+        (click)="activeTab = 'category'"
+      >
+        <i class="bi bi-folder-plus me-2"></i>Nueva Categoria
+      </button>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link"
+        [class.active]="activeTab === 'product'"
+        (click)="activeTab = 'product'"
+      >
+        <i class="bi bi-box-seam me-2"></i>Nuevo Producto
+      </button>
+    </li>
+  </ul>
+
+  <!-- Create Category -->
+  @if (activeTab === 'category') {
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-4">Crear Categoria</h5>
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nombre de la categoría"
+                [(ngModel)]="categoryName"
+              />
+            </div>
+            <button class="btn btn-primary w-100" (click)="submitCategory()">
+              <i class="bi bi-plus-lg me-2"></i>Crear Categoria
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Create Product -->
+  @if (activeTab === 'product') {
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-4">Crear Producto</h5>
+            <div class="mb-3">
+              <label class="form-label">Categoria</label>
+              <select class="form-select" [(ngModel)]="productCategoryId">
+                <option value="" disabled>Selecciona una categoría</option>
+                @for (cat of store.categories(); track cat.id) {
+                  <option [value]="cat.id">{{ cat.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" placeholder="Nombre del producto" [(ngModel)]="productName" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Codigo</label>
+                <input type="text" class="form-control" placeholder="Código del producto" [(ngModel)]="productCode" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Descripcion</label>
+              <textarea class="form-control" rows="3" placeholder="Descripción del producto" [(ngModel)]="productDescription"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Precio (€)</label>
+                <input type="number" class="form-control" min="0" step="0.01" [(ngModel)]="productPrice" />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" class="form-control" min="0" [(ngModel)]="productStock" />
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Imagen (URL)</label>
+                <input type="text" class="form-control" placeholder="https://..." [(ngModel)]="productImage" />
+              </div>
+            </div>
+            <button class="btn btn-primary w-100" (click)="submitProduct()">
+              <i class="bi bi-plus-lg me-2"></i>Crear Producto
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+}

@@ -1,0 +1,14 @@
+.nav-tabs .nav-link {
+  color: #495057;
+  font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+  color: #1a73e8;
+  border-color: #1a73e8;
+  border-bottom-color: transparent;
+}
+
+.card {
+  border: none;
+}

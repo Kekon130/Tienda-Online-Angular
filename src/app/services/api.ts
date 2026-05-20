@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Product } from '../models/product';
 import { Category } from '../models/category';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Api {
   private http = inject(HttpClient);
-  private API = 'http://localhost:3000';
+  private API = environment.apiUrl;
 
   private getCategories(): Promise<Category[]> {
     return firstValueFrom(this.http.get<any[]>(`${this.API}/categories`));

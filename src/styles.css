@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --primary-gradient: linear-gradient(135deg, #1a73e8, #0d47a1);
+  --bg-body: #f5f7fa;
+  --card-radius: 0.75rem;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  transition: all var(--transition-fast);
+}
+
+.card {
+  border-radius: var(--card-radius);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c9d4;
+  border-radius: 3px;
+}

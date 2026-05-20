@@ -1,4 +1,30 @@
+.product-card {
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
 .product-image {
-  height: '240px';
-  object-fit: 'cover';
+  height: 220px;
+  object-fit: cover;
+}
+
+@media (max-width: 575.98px) {
+  .product-image {
+    height: 200px;
+  }
+}
+
+.out-of-stock {
+  opacity: 0.55;
+}
+
+.out-of-stock:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }

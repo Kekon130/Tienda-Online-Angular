@@ -1,15 +1,15 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-      <i class="bi bi-shop fs-3 text-primary"></i>
-      <div class="d-flex flex-column">
-        <span>Tienda Online</span>
-        <small class="text-muted fw-normal"> Angular Standalone</small>
+<nav class="navbar sticky-top shadow-sm header-nav">
+  <div class="container-fluid px-3 px-md-4">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2 text-white" href="#">
+      <i class="bi bi-shop fs-3"></i>
+      <div class="d-flex flex-column lh-sm">
+        <span class="fs-5">Tienda Online</span>
+        <small class="fw-normal opacity-75" style="font-size: 0.7rem">Angular Standalone</small>
       </div>
     </a>
     <div class="d-flex align-items-center gap-2">
       <button
-        class="btn btn-outline-primary position-relative"
+        class="btn btn-outline-light position-relative"
         type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#cartOffcanvas"
@@ -21,7 +21,7 @@
           {{ store.getTotalItems() }}
         </span>
       </button>
-      <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#adminModal">
+      <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#adminModal">
         <i class="bi bi-shield-lock"></i>
       </button>
     </div>
