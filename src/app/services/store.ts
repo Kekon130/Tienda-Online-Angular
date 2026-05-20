@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { CartItem } from '../models/cart-item';
 import { Toast } from '../models/toast';
+import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +29,9 @@ export class Store {
     setTimeout(() => {
       this.toasts = this.toasts.filter((t) => t.id !== toast.id);
     }, 3000);
+  }
+
+  addToCart(productId: string) {
+    console.log('Producto añadido');
   }
 }

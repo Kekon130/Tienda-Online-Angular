@@ -1,12 +1,32 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { Header } from './components/header/header';
+import { Products } from './components/products/products';
+import { Cart } from './components/cart/cart';
+import { AdminModal } from './components/admin-modal/admin-modal';
+import { ToastContainer } from './components/toast-container/toast-container';
+import { Api } from './services/api';
+import { Store } from './services/store';
+import { Category } from './models/category';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterModule, Header, Products, Cart, AdminModal, ToastContainer],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  // styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('angular-shop');
+
+  private api = inject(Api);
+  private store = inject(Store);
+
+  ngOnInit(): void {
+    this.api.fetchInventory().then((inventory: Category[]) => {
+      this.store.categories = inventory;
+    });
+    console.log(this.store.categories);
+  }
 }
