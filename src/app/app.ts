@@ -7,13 +7,14 @@ import { ToastContainer } from './components/toast-container/toast-container';
 import { Api } from './services/api';
 import { Store } from './services/store';
 import { Category } from './models/category';
+import { Cart } from './components/cart/cart';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, Header, Products, ToastContainer],
+  imports: [RouterModule, Header, Products, ToastContainer, Cart],
   templateUrl: './app.html',
-  // styleUrl: './app.css',
+  styleUrl: './app.css',
 })
 export class App implements OnInit {
   protected readonly title = signal('angular-shop');
