@@ -44,3 +44,4 @@ __screenshots__/
 Thumbs.db
 
 pnpm-lock.yaml
+pnpm-workspace.yaml

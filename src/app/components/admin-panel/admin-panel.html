@@ -76,18 +76,24 @@
               <textarea class="form-control" rows="3" placeholder="Descripción del producto" [(ngModel)]="productDescription"></textarea>
             </div>
             <div class="row">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-6 mb-3">
                 <label class="form-label">Precio (€)</label>
                 <input type="number" class="form-control" min="0" step="0.01" [(ngModel)]="productPrice" />
               </div>
-              <div class="col-md-4 mb-3">
+              <div class="col-md-6 mb-3">
                 <label class="form-label">Stock</label>
                 <input type="number" class="form-control" min="0" [(ngModel)]="productStock" />
               </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Imagen (URL)</label>
-                <input type="text" class="form-control" placeholder="https://..." [(ngModel)]="productImage" />
-              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Imágenes (una URL por línea)</label>
+              <textarea
+                class="form-control"
+                rows="3"
+                placeholder="https://...&#10;https://..."
+                [(ngModel)]="productImages"
+              ></textarea>
+              <small class="text-muted">La primera URL será la miniatura principal.</small>
             </div>
             <button class="btn btn-primary w-100" (click)="submitProduct()">
               <i class="bi bi-plus-lg me-2"></i>Crear Producto

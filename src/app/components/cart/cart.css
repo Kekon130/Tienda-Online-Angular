@@ -1,6 +1,22 @@
-.offcanvas {
-  max-width: 90vw;
-  width: 400px;
+/* Cesta fija en la columna derecha en pantallas grandes. */
+.cart-panel {
+  position: sticky;
+  top: 5rem;
+  /* Limita la altura a la pantalla para que el total y los botones
+     siempre queden visibles sin tener que bajar la página. */
+  max-height: calc(100vh - 6rem);
+}
+
+/* El cuerpo no debe desbordar la tarjeta. */
+.cart-panel .card-body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Solo la lista de productos hace scroll; el total y botones quedan fijos. */
+.cart-items {
+  overflow-y: auto;
+  min-height: 0;
 }
 
 @media (max-width: 575.98px) {

@@ -3,14 +3,14 @@
 }
 
 .accordion-button:not(.collapsed) {
-  background-color: #e8f0fe;
-  color: #1a73e8;
+  background-color: var(--app-btn-bg);
+  color: var(--app-btn-text);
 }
 
 .accordion-button:focus {
-  box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.15);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
 }
 
 .accordion-body {
-  background-color: var(--bg-body);
+  background-color: var(--bs-body-bg);
 }

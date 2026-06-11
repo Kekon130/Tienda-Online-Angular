@@ -9,17 +9,12 @@
     </a>
     <div class="d-flex align-items-center gap-2">
       <button
-        class="btn btn-outline-light position-relative"
+        class="btn btn-outline-light"
         type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#cartOffcanvas"
+        (click)="store.toggleTheme()"
+        [title]="store.darkMode() ? 'Modo claro' : 'Modo oscuro'"
       >
-        <i class="bi bi-cart3"></i>
-        <span
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-        >
-          {{ store.getTotalItems() }}
-        </span>
+        <i class="bi" [class.bi-moon-stars]="!store.darkMode()" [class.bi-sun]="store.darkMode()"></i>
       </button>
       <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#adminModal">
         <i class="bi bi-shield-lock"></i>

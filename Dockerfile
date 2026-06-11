@@ -1,10 +1,9 @@
 FROM node:22-alpine AS build
 WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@11.1.3 --activate
 COPY package.json ./
-RUN pnpm install --no-frozen-lockfile
+RUN npm install
 COPY . .
-RUN pnpm build
+RUN npm run build
 
 FROM nginx:alpine
 COPY --from=build /app/dist/angular-shop/browser /usr/share/nginx/html

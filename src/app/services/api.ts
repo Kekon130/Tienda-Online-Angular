@@ -16,10 +16,36 @@ export class Api {
     return firstValueFrom(this.http.get<any[]>(`${this.API}/categories`));
   }
 
-  private getProducts(category_id: string): Promise<Product[]> {
-    return firstValueFrom(
-      this.http.get<Product[]>(`${this.API}/products?category_id=eq.${category_id}`),
+  private async getProducts(category_id: string): Promise<Product[]> {
+    const rows = await firstValueFrom(
+      this.http.get<any[]>(
+        `${this.API}/products?select=*,product_images(image_url,is_primary)&category_id=eq.${category_id}`,
+      ),
     );
+    return rows.map((row) => this.mapProduct(row));
+  }
+
+  // Construye un Product a partir de la fila de PostgREST, ordenando las
+  // imágenes con la primaria (is_primary) en primer lugar.
+  private mapProduct(row: any): Product {
+    const images: string[] = (row.product_images ?? [])
+      .slice()
+      .sort((a: any, b: any) => Number(b.is_primary) - Number(a.is_primary))
+      .map((img: any) => img.image_url);
+
+    const PLACEHOLDER = 'https://placehold.co/600x400?text=Sin+imagen';
+    const list = images.length > 0 ? images : [PLACEHOLDER];
+
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      price: row.price,
+      stock: row.stock,
+      code: row.code,
+      images: list,
+      image: list[0],
+    };
   }
 
   async fetchInventory(): Promise<Category[]> {

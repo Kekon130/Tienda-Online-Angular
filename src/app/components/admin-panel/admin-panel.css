@@ -1,11 +1,12 @@
 .nav-tabs .nav-link {
-  color: #495057;
+  color: var(--app-text);
   font-weight: 500;
 }
 
 .nav-tabs .nav-link.active {
-  color: #1a73e8;
-  border-color: #1a73e8;
+  color: var(--app-btn-text);
+  background-color: var(--app-btn-bg);
+  border-color: var(--app-btn-bg);
   border-bottom-color: transparent;
 }
 

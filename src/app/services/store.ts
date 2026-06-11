@@ -13,9 +13,23 @@ export class Store {
   cart = signal<CartItem[]>([]);
   adminLogged = signal(false);
   toasts = signal<Toast[]>([]);
+  darkMode = signal<boolean>(false);
 
-  getTotalItems(): number {
-    return this.cart().reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+  constructor() {
+    // Restaura la preferencia de tema guardada y la aplica al documento.
+    const stored = localStorage.getItem('theme');
+    this.setTheme(stored === 'dark');
+  }
+
+  toggleTheme() {
+    this.setTheme(!this.darkMode());
+  }
+
+  private setTheme(dark: boolean) {
+    this.darkMode.set(dark);
+    const theme = dark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', theme);
+    localStorage.setItem('theme', theme);
   }
 
   showToast(message: string, type: string = 'success') {
@@ -133,9 +147,15 @@ export class Store {
 
   createProduct(categoryId: string, product: Omit<Product, 'id'>) {
     const id = crypto.randomUUID();
+    // Aseguramos al menos una imagen para que la miniatura/hover funcionen.
+    const images = product.images?.length
+      ? product.images
+      : ['https://placehold.co/600x400?text=Sin+imagen'];
+    const newProduct: Product = { ...product, id, images, image: images[0] };
+
     this.categories.update((cats) =>
       cats.map((cat) =>
-        cat.id === categoryId ? { ...cat, products: [...cat.products, { ...product, id }] } : cat,
+        cat.id === categoryId ? { ...cat, products: [...cat.products, newProduct] } : cat,
       ),
     );
     this.showToast('Producto creado correctamente', 'success');

@@ -19,7 +19,7 @@ export class AdminPanel {
   productDescription = '';
   productPrice = 0;
   productStock = 0;
-  productImage = '';
+  productImages = '';
   productCode = '';
   productCategoryId = '';
 
@@ -41,19 +41,26 @@ export class AdminPanel {
       this.store.showToast('El nombre del producto es obligatorio', 'danger');
       return;
     }
+    // Una URL por línea; descartamos líneas en blanco. La primera es la principal.
+    const images = this.productImages
+      .split('\n')
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0);
+
     this.store.createProduct(this.productCategoryId, {
       name: this.productName.trim(),
       description: this.productDescription.trim(),
       price: this.productPrice,
       stock: this.productStock,
-      image: this.productImage.trim(),
+      images,
+      image: images[0] ?? '',
       code: this.productCode.trim(),
     });
     this.productName = '';
     this.productDescription = '';
     this.productPrice = 0;
     this.productStock = 0;
-    this.productImage = '';
+    this.productImages = '';
     this.productCode = '';
     this.productCategoryId = '';
   }

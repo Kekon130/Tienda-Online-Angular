@@ -1,22 +1,95 @@
+/* ==========================================================================
+   PALETAS DE COLOR (modo claro / oscuro) + mapeo a variables de Bootstrap 5.3
+   El tema se controla con el atributo data-bs-theme en <html>.
+   ========================================================================== */
+
+/* --- Modo claro (por defecto) --- */
+:root,
+[data-bs-theme='light'] {
+  --app-bg: #fffffe;
+  --app-heading: #181818;
+  --app-text: #2e2e2e;
+  --app-btn-bg: #4fc4cf;
+  --app-btn-text: #181818;
+  --app-border: #181818;
+  --app-accent-1: #994ff3; /* morado */
+  --app-accent-2: #fbdd74; /* amarillo */
+
+  --primary-gradient: linear-gradient(135deg, #4fc4cf, #994ff3);
+
+  /* Mapeo a Bootstrap */
+  --bs-body-bg: var(--app-bg);
+  --bs-body-color: var(--app-text);
+  --bs-primary: var(--app-btn-bg);
+  --bs-primary-rgb: 79, 196, 207;
+  --bs-border-color: var(--app-border);
+  --bs-emphasis-color: var(--app-heading);
+}
+
+/* --- Modo oscuro --- */
+[data-bs-theme='dark'] {
+  --app-bg: #16161a;
+  --app-heading: #fffffe;
+  --app-text: #94a1b2;
+  --app-btn-bg: #7f5af0;
+  --app-btn-text: #fffffe;
+  --app-border: #010101;
+  --app-accent-1: #72757e; /* gris */
+  --app-accent-2: #2cb67d; /* verde */
+
+  --primary-gradient: linear-gradient(135deg, #7f5af0, #2cb67d);
+
+  --bs-body-bg: var(--app-bg);
+  --bs-body-color: var(--app-text);
+  --bs-primary: var(--app-btn-bg);
+  --bs-primary-rgb: 127, 90, 240;
+  --bs-border-color: var(--app-border);
+  --bs-emphasis-color: var(--app-heading);
+}
+
 :root {
-  --primary-gradient: linear-gradient(135deg, #1a73e8, #0d47a1);
-  --bg-body: #f5f7fa;
   --card-radius: 0.75rem;
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
 }
 
 body {
-  background-color: var(--bg-body);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Títulos principales usan el color de encabezado de la paleta. */
+h1, h2, h3, h4, h5, h6,
+.card-title {
+  color: var(--app-heading);
 }
 
 .btn {
   transition: all var(--transition-fast);
 }
 
+/* Botones principales según la paleta. */
+.btn-primary {
+  --bs-btn-bg: var(--app-btn-bg);
+  --bs-btn-border-color: var(--app-btn-bg);
+  --bs-btn-color: var(--app-btn-text);
+  --bs-btn-hover-bg: var(--app-accent-1);
+  --bs-btn-hover-border-color: var(--app-accent-1);
+  --bs-btn-hover-color: var(--app-btn-text);
+  --bs-btn-disabled-bg: var(--app-btn-bg);
+  --bs-btn-disabled-border-color: var(--app-btn-bg);
+  --bs-btn-disabled-color: var(--app-btn-text);
+}
+
+/* El precio (antes text-success) usa el acento secundario. */
+.text-success {
+  color: var(--app-accent-2) !important;
+}
+
 .card {
+  background-color: var(--bs-body-bg);
   border-radius: var(--card-radius);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
@@ -26,6 +99,6 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c9d4;
+  background: var(--app-accent-1);
   border-radius: 3px;
 }
