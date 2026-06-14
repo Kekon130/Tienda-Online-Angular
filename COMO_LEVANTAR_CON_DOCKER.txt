@@ -1,0 +1,141 @@
+========================================================================
+  CÓMO LEVANTAR LA APLICACIÓN CON DOCKER
+  Tienda Online Angular
+========================================================================
+
+------------------------------------------------------------------------
+1. REQUISITOS PREVIOS
+------------------------------------------------------------------------
+
+Antes de empezar necesitas tener instalado en tu equipo:
+
+  - Docker Engine (versión 20.10 o superior)
+  - Docker Compose (incluido en Docker Desktop, o el plugin
+    "docker compose" en Linux)
+
+Para comprobar que están instalados, ejecuta:
+
+    docker --version
+    docker compose version
+
+Asegúrate también de que los siguientes puertos estén libres en tu
+máquina, ya que los servicios los van a usar:
+
+  - 4200  -> Aplicación Angular (frontend)
+  - 3000  -> API REST (PostgREST)
+  - 5432  -> Base de datos PostgreSQL
+  - 8080  -> Swagger UI (documentación de la API)
+
+
+------------------------------------------------------------------------
+2. QUÉ SERVICIOS SE LEVANTAN
+------------------------------------------------------------------------
+
+El archivo "docker-compose.yaml" define 4 contenedores:
+
+  - db          : Base de datos PostgreSQL. Carga el script db/init.sql
+                  en el primer arranque.
+  - server      : PostgREST, que expone la base de datos como una API
+                  REST en el puerto 3000.
+  - angular-app : La aplicación Angular ya compilada y servida con
+                  Nginx en el puerto 4200.
+  - swagger     : Swagger UI para explorar la API en el puerto 8080.
+
+
+------------------------------------------------------------------------
+3. LEVANTAR LA APLICACIÓN
+------------------------------------------------------------------------
+
+Abre una terminal en la raíz del proyecto (donde está el archivo
+"docker-compose.yaml") y ejecuta:
+
+    docker compose up -d --build
+
+Explicación de las opciones:
+
+  - up        : Crea y arranca todos los contenedores.
+  - -d        : Modo "detached", los contenedores corren en segundo
+                plano y la terminal queda libre.
+  - --build   : Construye la imagen de la aplicación Angular a partir
+                del Dockerfile (necesario la primera vez o cuando
+                cambies el código).
+
+La primera ejecución tardará varios minutos porque tiene que:
+  - Descargar las imágenes base (node, nginx, postgres, etc.).
+  - Instalar las dependencias y compilar la aplicación Angular.
+
+
+------------------------------------------------------------------------
+4. ACCEDER A LA APLICACIÓN
+------------------------------------------------------------------------
+
+Una vez que los contenedores estén arriba, abre el navegador en:
+
+  - Aplicación web :  http://localhost:4200
+  - API REST       :  http://localhost:3000
+  - Swagger UI     :  http://localhost:8080
+
+
+------------------------------------------------------------------------
+5. COMANDOS ÚTILES
+------------------------------------------------------------------------
+
+Ver el estado de los contenedores:
+
+    docker compose ps
+
+Ver los logs de todos los servicios (en tiempo real):
+
+    docker compose logs -f
+
+Ver los logs de un servicio concreto (ej. la app Angular):
+
+    docker compose logs -f angular-app
+
+Detener los contenedores SIN borrarlos:
+
+    docker compose stop
+
+Volver a arrancar contenedores detenidos:
+
+    docker compose start
+
+Detener y ELIMINAR los contenedores y las redes:
+
+    docker compose down
+
+Detener, eliminar contenedores Y BORRAR la base de datos (volúmenes):
+
+    docker compose down -v
+
+  ATENCIÓN: el comando anterior borra todos los datos de PostgreSQL.
+  Úsalo solo si quieres empezar de cero.
+
+
+------------------------------------------------------------------------
+6. RECONSTRUIR TRAS CAMBIOS EN EL CÓDIGO
+------------------------------------------------------------------------
+
+Si modificas el código de la aplicación Angular y quieres ver los
+cambios, vuelve a construir la imagen y reinicia:
+
+    docker compose up -d --build angular-app
+
+
+------------------------------------------------------------------------
+7. PROBLEMAS FRECUENTES
+------------------------------------------------------------------------
+
+  - "Puerto ya en uso": comprueba que los puertos 4200, 3000, 5432 y
+    8080 no estén ocupados por otro proceso. Ciérralo o cambia el
+    mapeo de puertos en docker-compose.yaml.
+
+  - "La app no carga datos": espera unos segundos; la base de datos
+    tiene un healthcheck y el servicio "server" no arranca hasta que
+    PostgreSQL está lista. Revisa los logs con:
+        docker compose logs -f db server
+
+  - "Cambios que no se ven": recuerda reconstruir con --build, ya que
+    la app Angular se sirve compilada y no en modo desarrollo.
+
+========================================================================
